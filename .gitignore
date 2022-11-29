@@ -2,4 +2,4 @@ venv/
 .env
 *.sqlite3
 htmlcov/
-.coverage
+*.coverage
