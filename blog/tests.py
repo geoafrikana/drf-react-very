@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import Post, Category
+from rest_framework.test import APIClient
+from django.urls import reverse
+from rest_framework import status
 
 
 class Test_Create_Post(TestCase):
@@ -34,5 +37,33 @@ class Test_Create_Post(TestCase):
         self.assertEqual(str(cat), 'django')
         self.assertEqual(str(cat), cat.name)
         self.assertEqual(post.category_id, 1)
+
+def test_post_update(self):
+
+        client = APIClient()
+
+        self.test_category = Category.objects.create(name='django')
+        self.testuser1 = User.objects.create_user(
+            username='test_user1', password='123456789')
+        self.testuser2 = User.objects.create_user(
+            username='test_user2', password='123456789')
+        test_post = Post.objects.create(
+            category_id=1, title='Post Title', excerpt='Post Excerpt', content='Post Content', slug='post-title', author_id=1, status='published')
+
+        client.login(username=self.testuser1.username,
+                     password='123456789')
+
+        url = reverse(('blog_api:detailcreate'), kwargs={'pk': 1})
+
+        response = client.put(
+            url, {
+                "title": "New",
+                "author": 1,
+                "excerpt": "New",
+                "content": "New",
+                "status": "published"
+            }, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         
 
